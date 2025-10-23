@@ -10,18 +10,18 @@ const TaskList = ({ data }) => {
       id="tasklist"
       className="h-[50%] mx-24 p-5 flex gap-5  overflow-x-scroll"
     >
-      {data.data.tasks.map((elem) => {
+      {data.tasks.map((elem,idx) => {
         if (elem.active) {
-          return <AcceptTask key={elem.id} data={elem} />;
+          return <AcceptTask key={idx} data={elem} />;
         }
         if (elem.newTask) {
-          return <NewTask key={elem.id} data={elem} />;
+          return <NewTask key={idx} data={elem} />;
         }
         if (elem.completed) {
-          return <CompletedTask key={elem.id} data={elem} />;
+          return <CompletedTask key={idx} data={elem} />;
         }
         if (elem.failed) {
-          <FailedTask key={task.id} data={elem.id} />;
+          <FailedTask key={idx} data={elem.id} />;
         }
       })}
     </div>

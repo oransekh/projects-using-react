@@ -1,25 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
 const CreateTask = () => {
+  const [userData, setUserData] = useContext(AuthContext);
+
   const [form, setForm] = useState({
-    title: "",
-    deadline: "",
+    taskTitle: "",
+    taskDate: "",
     assignedTo: "",
-    description: "",
+    category: "",
+    taskDescription: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
+  console.log(userData);
+
   const handelForm = (e) => {
     e.preventDefault();
-    console.log(form);
+
+    const newTask = {
+      ...form,
+      active: false,
+      newTask: true,
+      failed: false,
+      completed: false,
+    };
+
+    let assigned = false; // track if any match found
+
+    const updatedEmployees = userData.employees.map((elem) => {
+      if (form.assignedTo.toLowerCase() === elem.firstName.toLowerCase()) {
+        assigned = true;
+        return {
+          ...elem,
+          tasks: [...elem.tasks, newTask],
+          taskCounts: {
+            ...elem.taskCounts,
+            newTask: elem.taskCounts.newTask + 1,
+          },
+        };
+      }
+      return elem;
+    });
+
+    if (assigned) {
+      setUserData({ ...userData, employees: updatedEmployees });
+      localStorage.setItem("employees", JSON.stringify(updatedEmployees));
+      alert(`✅ Task assigned to ${form.assignedTo} successfully!`);
+    } else {
+      alert(`⚠️ Employee '${form.assignedTo}' not found!`);
+    }
+
     setForm({
-      title: "",
-      deadline: "",
+      taskTitle: "",
+      taskDate: "",
       assignedTo: "",
-      description: "",
+      category: "",
+      taskDescription: "",
     });
   };
 
@@ -39,8 +78,8 @@ const CreateTask = () => {
               <input
                 required
                 onChange={handleChange}
-                value={form.title}
-                name="title"
+                value={form.taskTitle}
+                name="taskTitle"
                 type="text"
                 className="w-full p-2 rounded-md bg-[#2b2b2b] text-gray-100 border border-gray-600 focus:outline-none focus:border-[#43baff] transition"
                 placeholder="e.g. Make a UI Design"
@@ -54,8 +93,8 @@ const CreateTask = () => {
               <input
                 required
                 onChange={handleChange}
-                value={form.deadline}
-                name="deadline"
+                value={form.taskDate}
+                name="taskDate"
                 type="date"
                 className="w-full p-2 rounded-md bg-[#2b2b2b] text-gray-100 border border-gray-600 focus:outline-none focus:border-[#43baff] transition"
               />
@@ -75,6 +114,21 @@ const CreateTask = () => {
                 placeholder="e.g. John Doe"
               />
             </div>
+
+            <div>
+              <label className="block mb-2 font-medium text-gray-300">
+                Category
+              </label>
+              <input
+                required
+                onChange={handleChange}
+                value={form.category}
+                name="category"
+                type="text"
+                className="w-full p-2 rounded-md bg-[#2b2b2b] text-gray-100 border border-gray-600 focus:outline-none focus:border-[#43baff] transition"
+                placeholder="e.g. Development"
+              />
+            </div>
           </div>
 
           {/* Right Side - Description */}
@@ -85,8 +139,8 @@ const CreateTask = () => {
             <textarea
               required
               onChange={handleChange}
-              value={form.description}
-              name="description"
+              value={form.taskDescription}
+              name="taskDescription"
               rows="5"
               className="w-full p-3 rounded-md bg-[#2b2b2b] text-gray-100 border border-gray-600 focus:outline-none focus:border-[#43baff] transition resize-none"
               placeholder="Enter task description here..."

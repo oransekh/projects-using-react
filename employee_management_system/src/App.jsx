@@ -8,7 +8,6 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [loggedInUserData, setLoggedInUserData] = useState(null);
   const [userData] = useContext(AuthContext);
-  console.log(loggedInUserData);
   const { admin, employees } = userData;
 
   useEffect(() => {
@@ -29,7 +28,6 @@ const App = () => {
     if (adminData) {
       setUser("admin");
       localStorage.setItem("loggedInUser", JSON.stringify({ role: "admin" }));
-
     } else if (userData) {
       const employeeData = employees.find(
         (employee) => employee.email === email && employee.password === password
@@ -38,9 +36,11 @@ const App = () => {
       if (employeeData) {
         setUser("employee");
         setLoggedInUserData(employeeData);
-        localStorage.setItem("loggedInUser", JSON.stringify({ role: "employee", data: employeeData }));
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({ role: "employee", data: employeeData })
+        );
       }
-      
     } else {
       console.log("login poblem");
     }
@@ -51,9 +51,9 @@ const App = () => {
       {!user ? (
         <Login handelLogin={handelLogin} />
       ) : user === "admin" ? (
-        <AdminDashboard />
+        <AdminDashboard changeUser={setUser} />
       ) : user === "employee" ? (
-        <EmployeeDashboard data={loggedInUserData} />
+        <EmployeeDashboard data={loggedInUserData} changeUser={setUser} />
       ) : (
         <p>No user type found</p>
       )}

@@ -1,11 +1,12 @@
 import React from "react";
 
-const Header = ({ data }) => {
-  const userName = data?.data?.firstName || "admin";
+const Header = ({ data, changeUser }) => {
+  const userName = data?.firstName || "admin";
 
   const handelLogOut = () => {
     localStorage.setItem("loggedInUser", "");
-    window.location.reload();
+    // window.location.reload();
+    changeUser("");
   };
 
   return (

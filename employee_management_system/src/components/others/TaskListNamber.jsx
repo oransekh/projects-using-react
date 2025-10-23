@@ -1,7 +1,7 @@
 import React from "react";
 
 const TaskListNamber = (data) => {
-  const userData = data.data.data.taskCounts;
+  const userData = data.data.taskCounts;
  
   return (
     <section className="flex px-24 py-10 gap-10 screen">
