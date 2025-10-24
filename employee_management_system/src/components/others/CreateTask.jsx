@@ -15,7 +15,7 @@ const CreateTask = () => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-  console.log(userData);
+  console.log(userData.employees);
 
   const handelForm = (e) => {
     e.preventDefault();
@@ -47,7 +47,6 @@ const CreateTask = () => {
 
     if (assigned) {
       setUserData({ ...userData, employees: updatedEmployees });
-      localStorage.setItem("employees", JSON.stringify(updatedEmployees));
       alert(`✅ Task assigned to ${form.assignedTo} successfully!`);
     } else {
       alert(`⚠️ Employee '${form.assignedTo}' not found!`);
@@ -104,15 +103,19 @@ const CreateTask = () => {
               <label className="block mb-2 font-medium text-gray-300">
                 Assigned To
               </label>
-              <input
-                required
+              <select
                 onChange={handleChange}
                 value={form.assignedTo}
                 name="assignedTo"
-                type="text"
                 className="w-full p-2 rounded-md bg-[#2b2b2b] text-gray-100 border border-gray-600 focus:outline-none focus:border-[#43baff] transition"
-                placeholder="e.g. John Doe"
-              />
+              >
+                <option value="">-- Select Employee --</option>
+                {userData.employees.map((emp, index) => (
+                  <option key={index} value={emp.firstName}>
+                    {emp.firstName}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
