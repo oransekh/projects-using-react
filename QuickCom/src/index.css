@@ -1,0 +1,17 @@
+/* google fonts inner */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@import "tailwindcss";
+
+/* whole website color plate */
+@theme {
+  --color-heading-text: #374151;
+  --color-button: #f97316;
+
+  --font-sans: "Poppins", sans-serif;
+  --radius-base: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --spacing-base: 1rem;
+  --spacing-lg: 2rem;
+}

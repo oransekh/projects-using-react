@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* 🧭 Define your design system here */
+@theme {
+  --color-primary: #1e88e5;
+  --color-secondary: #1565c0;
+  --color-accent: #fdd835;
+  --color-bg: #f9fafb;
+  --color-text: #1f2937;
+  --color-text-light: #6b7280;
+  --color-heading: #111827;
+
+  --font-sans: "Poppins", sans-serif;
+  --radius-base: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --spacing-base: 1rem;
+  --spacing-lg: 2rem;
+}
+
