@@ -5,7 +5,7 @@ import { assets } from "../../assets/assets";
 import { useState } from "react";
 
 const Header = () => {
-  const [openMenu, isOpenMenu] = useState(true);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const NavLinks = [
     { name: "Home", path: "/" },
@@ -13,6 +13,7 @@ const Header = () => {
     { name: "About Us", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
+
   return (
     <nav className="relative flex justify-between py-3 items-center text-sm text-gray-700 lg:px-24 md:px-12 px-6 border border-b-2 border-gray-200">
       <img className="h-8" src={assets.logo} alt="logo" />
@@ -39,15 +40,49 @@ const Header = () => {
           <span className="hidden lg:block">Account</span>
         </div>
 
-        <button onClick={() => isOpenMenu(true)} className="lg:hidden">
+        <button onClick={() => setOpenMenu(true)} className="lg:hidden">
           <Menu className="h-5 text-gray-500" />
         </button>
 
         {/* mobile menu */}
         {openMenu && (
-          <div className="fixed top-0 right-0 bg-[#ffffff] w-62 h-full shadow-sm">
-            <div className=" border-b-gray-200 h-10 items-center">
-              <X />
+          <div
+            className={`fixed top-0 right-0 bg-[#ffffff] w-64 h-full shadow-sm sm:hidden z-50
+              transform transition-transform duration-600
+              ${openMenu ? "translate-x-0" : "translate-x-full"}`}
+          >
+            <div className="relative border border-gray-200 h-15 flex items-center">
+              <X
+                onClick={() => setOpenMenu(false)}
+                className="h-5 text-gray-500 left-5"
+              />
+              <span className="absolute left-1/2 -translate-x-1/2">Menu</span>
+            </div>
+            {/* nav-items*/}
+            <div className="flex flex-col gap-3 px-3 py-4">
+              {NavLinks.map((nav, index) => (
+                <Link
+                  key={index}
+                  to={nav.path}
+                  className="flex items-center justify-between 
+                 bg-white p-4 rounded-2xl 
+                 border border-gray-100 shadow-sm
+                 hover:shadow-md hover:bg-gray-50
+                 transition-all duration-200"
+                >
+                  <span className="text-gray-800 font-medium">{nav.name}</span>
+                  <span className="text-gray-400 text-lg">›</span>
+                </Link>
+              ))}
+
+              {/* Special Button */}
+              <button
+                className="w-full mt-2  bg-button 
+                     text-white py-4 rounded-xl font-medium 
+                     shadow-sm hover:shadow-md transition-all"
+              >
+                Seller Dashboard
+              </button>
             </div>
           </div>
         )}

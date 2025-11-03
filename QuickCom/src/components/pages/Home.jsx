@@ -1,11 +1,13 @@
-import React from 'react'
-
+import React from "react";
+import HeroSlider from "../../components/common/HeroSlider";
+import HomeProducts from "../common/HomeProducts";
 const Home = () => {
   return (
-    <div>
-      i am home page
-    </div>
-  )
-}
+    <main>
+      <HeroSlider />
+      <HomeProducts />
+    </main>
+  );
+};
 
-export default Home
+export default Home;
