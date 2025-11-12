@@ -78,6 +78,8 @@ const HeroSlider = () => {
 
               {/* Image Section */}
               <img
+                decoding="sync"
+                loading="eager"
                 src={item.imgSrc}
                 alt="Product"
                 className="max-w-[220px] py-5 md:max-w-[300px] lg:max-w-[360px] w-full"

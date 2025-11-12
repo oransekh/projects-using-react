@@ -4,7 +4,8 @@ const ProductCard = ({ product }) => {
   return (
     <div className="items-start gap-0.5 max-w-[200px] w-full cursor-pointer">
       <div className="bg-[#f0f0f2]  rounded-md w-full h-52 ">
-        <img src={product.image[0]} alt="" />
+        <img  loading="lazy"
+            decoding="async" src={product.image[0]} alt="" />
       </div>
       <p className="md:text-base font-medium pt-2 w-full truncate">
         {product.name}
