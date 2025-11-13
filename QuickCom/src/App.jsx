@@ -12,6 +12,9 @@ import Cart from "./components/pages/Cart";
 import MyOrder from "./components/pages/MyOrder";
 import Product from "./components/pages/Product";
 
+// login component
+import Login from "./components/Auth/Login.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -51,7 +54,11 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <RouterProvider router={router}>
+      <Login />
+    </RouterProvider>
+  );
 };
 
 export default App;

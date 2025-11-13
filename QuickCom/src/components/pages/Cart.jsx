@@ -1,8 +1,23 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { assets } from "../../assets/assets";
+import { removeItem } from "../data/addTocartSlice";
+import { incressQuantity } from "../data/addTocartSlice";
+import { decreaseQuantity } from "../data/addTocartSlice";
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.items);
-  console.log("Cart Items:", cartItems);
+
+  const dispatch = useDispatch();
+
+  const subtotal = cartItems.map((item) => ({
+    ...item,
+    subtotal: item.price * item.quantity,
+  }));
+
+  const totalPrice = subtotal.reduce((acc, item) => acc + item.subtotal, 0);
+  const tax = Math.round(totalPrice * 0.02);
+  const grandTotal = Math.floor(totalPrice + tax);
+
   return (
     <div className="flex flex-col md:flex-row gap-10 px-6 md:px-16 lg:px-32 pt-14 mb-20">
       <div className="flex-1">
@@ -30,7 +45,81 @@ const Cart = () => {
                 </th>
               </tr>
             </thead>
-            <tbody></tbody>
+
+            {subtotal.length === 0
+              ? "No items in the cart"
+              : subtotal.map((item) => (
+                  <tbody>
+                    <tr>
+                      <td className="flex items-center gap-4 py-4 md:px-4 px-1">
+                        <div>
+                          <div className="rounded-lg overflow-hidden bg-gray-500/10 p-2">
+                            <img
+                              src={item.image?.[0]}
+                              className="w-16 h-auto object-cover mix-blend-multiply"
+                              alt=""
+                              decoding="async"
+                              loading="lazy"
+                            />
+                          </div>
+                          <button className="md:hidden text-xs text-orange-600 mt-1">
+                            remove
+                          </button>
+                        </div>
+
+                        <div className="text-sm hidden md:block">
+                          <p className="text-gray-800">{item.name}</p>
+                          <button
+                            onClick={() => dispatch(removeItem(item))}
+                            className="text-xs text-orange-600 mt-1"
+                          >
+                            remove
+                          </button>
+                        </div>
+                      </td>
+
+                      <td className="py-4 md:px-4 px-1 text-gray-600">
+                        {item.price}
+                      </td>
+
+                      <td className="py-4 md:px-4 px-1">
+                        <div>
+                          <button
+                            onClick={() => dispatch(decreaseQuantity(item))}
+                          >
+                            <img
+                              decoding="async"
+                              loading="lazy"
+                              className="h-4 w-4"
+                              src={assets.decrease_arrow}
+                              alt="decrease"
+                            />
+                          </button>
+                          <input
+                            type="number"
+                            className="w-8 border text-center appearance-none no-spinner"
+                            value={item.quantity}
+                          />
+                          <button
+                            onClick={() => dispatch(incressQuantity(item))}
+                          >
+                            <img
+                              decoding="async"
+                              loading="lazy"
+                              className="h-4 w-4"
+                              src={assets.increase_arrow}
+                              alt="increase"
+                            />
+                          </button>
+                        </div>
+                      </td>
+
+                      <td className="py-4 md:px-5 px-1 text-gray-600 font-medium">
+                        {item.subtotal}
+                      </td>
+                    </tr>
+                  </tbody>
+                ))}
           </table>
         </div>
       </div>
@@ -65,7 +154,7 @@ const Cart = () => {
         <div class="space-y-4">
           <div class="flex justify-between text-base font-medium">
             <p class="text-gray-600">Price</p>
-            <p class="text-gray-800">0</p>
+            <p class="text-gray-800">{totalPrice}</p>
           </div>
           <div class="flex justify-between">
             <p class="text-gray-600">Shipping Fee</p>
@@ -73,11 +162,11 @@ const Cart = () => {
           </div>
           <div class="flex justify-between">
             <p class="text-gray-600">Tax (2%)</p>
-            <p class="font-medium text-gray-800">0</p>
+            <p class="font-medium text-gray-800">{tax}</p>
           </div>
           <div class="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
             <p>Total</p>
-            <p></p>
+            <p>{grandTotal}</p>
           </div>
         </div>
         <button class="w-full bg-orange-600 text-white py-3 mt-5 hover:bg-orange-700">

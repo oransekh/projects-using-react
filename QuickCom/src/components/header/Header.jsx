@@ -35,10 +35,10 @@ const Header = () => {
         <button>
           <Search className="h-5 text-gray-500" />
         </button>
-        <div className="flex items-center gap-1 text-sm">
+        <button className="flex items-center gap-1 text-sm cursor-pointer">
           <User className="h-5 text-gray-500" />{" "}
           <span className="hidden lg:block">Account</span>
-        </div>
+        </button>
 
         <button onClick={() => setOpenMenu(true)} className="lg:hidden">
           <Menu className="h-5 text-gray-500" />
