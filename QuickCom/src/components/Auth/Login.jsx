@@ -1,6 +1,12 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { LoginUser } from "../data/AuthSlice";
+import { LoginOpen } from "../data/AuthSlice";
+import { X } from "lucide-react";
 
 export default function Login() {
+  const dispatch = useDispatch();
+
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -13,14 +19,25 @@ export default function Login() {
     });
   };
 
-  const handelSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     console.log("Submitting login data:", loginData);
-    // submit login data
+    dispatch(LoginUser(loginData));
   };
 
   return (
     <div className="inset-0 fixed backdrop-blur-xs bg-black/25">
-      <form className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white text-gray-500 max-w-[350px] mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">
+      <form
+        onSubmit={handleSubmit}
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white text-gray-500 max-w-[350px] mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10"
+      >
+        <span>
+          <X
+            onClick={() => dispatch(LoginOpen(false))}
+            className="h-5 absolute cursor-pointer text-gray-500 right-5"
+          />
+        </span>
+
         <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
           Login Now
         </h2>
@@ -37,8 +54,8 @@ export default function Login() {
 
         <input
           name="password"
-          value={loginData.password}
           onChange={handleChange}
+          value={loginData.password}
           className="w-full border mt-1 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
           type="password"
           placeholder="Enter your password"
@@ -52,7 +69,6 @@ export default function Login() {
         </div>
 
         <button
-          onClick={() => handelSubmit()}
           type="submit"
           className="w-full mb-3 bg-button hover:bg-button/90 active:scale-95 transition py-2.5 rounded-full text-white"
         >

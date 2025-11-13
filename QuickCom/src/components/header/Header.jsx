@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { User, Search, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { LoginOpen } from "../data/AuthSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
 
   const NavLinks = [
@@ -35,7 +37,10 @@ const Header = () => {
         <button>
           <Search className="h-5 text-gray-500" />
         </button>
-        <button className="flex items-center gap-1 text-sm cursor-pointer">
+        <button
+          onClick={() => dispatch(LoginOpen(true))}
+          className="flex items-center gap-1 text-sm cursor-pointer"
+        >
           <User className="h-5 text-gray-500" />{" "}
           <span className="hidden lg:block">Account</span>
         </button>

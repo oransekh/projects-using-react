@@ -12,8 +12,6 @@ import Cart from "./components/pages/Cart";
 import MyOrder from "./components/pages/MyOrder";
 import Product from "./components/pages/Product";
 
-// login component
-import Login from "./components/Auth/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -54,11 +52,7 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return (
-    <RouterProvider router={router}>
-      <Login />
-    </RouterProvider>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
