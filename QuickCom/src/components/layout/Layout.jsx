@@ -5,14 +5,17 @@ import Footer from "../footer/Footer";
 import Login from "../Auth/Login.jsx";
 import { useSelector } from "react-redux";
 
-
 const Layout = () => {
-  const isOpen = useSelector((state) => state.auth.isLoginOpen);
+  const isOpen = useSelector((state) => state.auth.openForm);
+  const isActive = useSelector((state) => state.auth.loginStatus);
+
+  console.log("Layout - isOpen:", isOpen);
+  console.log("Layout - isActive:", isActive);
   return (
     <div>
       <Header />
       <Outlet />
-      {isOpen && <Login />}
+      {!isActive && isOpen && <Login />}
       <Footer />
     </div>
   );

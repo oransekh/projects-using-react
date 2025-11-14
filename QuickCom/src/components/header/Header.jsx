@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { User, Search, Menu, X } from "lucide-react";
+import { User, Search, Menu, X, UserRoundCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import { useDispatch } from "react-redux";
-import { LoginOpen } from "../data/AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fromOpen } from "../data/AuthSlice";
 
 const Header = () => {
-  const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
-
+  const dispatch = useDispatch();
   const NavLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
     { name: "About Us", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
+
+  const isOpen = useSelector((state) => state.auth.openForm);
+  const isActive = useSelector((state) => state.auth.loginStatus);
 
   return (
     <nav className="relative flex justify-between py-3 items-center text-sm text-gray-700 lg:px-24 md:px-12 px-6 border border-b-2 border-gray-200">
@@ -37,13 +39,23 @@ const Header = () => {
         <button>
           <Search className="h-5 text-gray-500" />
         </button>
-        <button
-          onClick={() => dispatch(LoginOpen(true))}
-          className="flex items-center gap-1 text-sm cursor-pointer"
-        >
-          <User className="h-5 text-gray-500" />{" "}
-          <span className="hidden lg:block">Account</span>
-        </button>
+
+        {!isActive ? (
+          <button
+            onClick={() => {
+              dispatch(fromOpen(true));
+            }}
+            className="flex items-center gap-1 text-sm cursor-pointer"
+          >
+            <User className="h-5 text-gray-500" />{" "}
+            <span className="hidden lg:block">Account</span>
+          </button>
+        ) : (
+          <button className="flex items-center gap-1 text-sm cursor-pointer">
+            <UserRoundCheck className="h-5 text-gray-500" />{" "}
+            <span className="hidden lg:block">Profile</span>
+          </button>
+        )}
 
         <button onClick={() => setOpenMenu(true)} className="lg:hidden">
           <Menu className="h-5 text-gray-500" />

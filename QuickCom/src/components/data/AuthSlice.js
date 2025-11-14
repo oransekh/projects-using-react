@@ -48,44 +48,54 @@ const users = [
   },
 ];
 
+// Load saved user from localStorage
+const savedUser = JSON.parse(localStorage.getItem("userInformation")) || null;
+const Status = JSON.parse(localStorage.getItem("userStates")) || null;
+
 const AuthSlice = createSlice({
   name: "auth",
   initialState: {
-    allUsers: users, // all users list
-    currentUser: null, // logged-in user
-    loginError: null,
-    userLogin: false,
-    isLoginOpen: false,
+    users: users, // all users
+    activeUser: savedUser, // logged-in user OR null
+    loginStatus: savedUser ? Status : false,
+    openForm: false, // open Login & Sign-up form
   },
 
   reducers: {
     LoginUser: (state, action) => {
       const { email, password } = action.payload;
 
-      const existingUser = state.allUsers.find(
-        (user) => user.email === email && user.password === password
+      // Find user with matching credentials
+      const foundUser = state.users.find(
+        (u) => u.email === email && u.password === password
       );
 
-      if (existingUser) {
-        state.currentUser = existingUser; // SUCCESS
-        state.userLogin = true;
-        state.loginError = null;
-      } else {
-        state.currentUser = null;
-        state.loginError = "Invalid email or password"; // ERROR
-      }
-      localStorage.setItem("setUser", JSON.stringify(state.currentUser));
-    },
+      if (foundUser) {
+        state.activeUser = foundUser;
+        state.loginStatus = true;
+        state.openForm = false;
 
-    LoginOpen: (state, action) => {
-      state.isLoginOpen = action.payload;
+        // Save to localStorage
+        localStorage.setItem("userInformation", JSON.stringify(foundUser));
+        localStorage.setItem("userStates", JSON.stringify(true));
+      } else {
+        state.activeUser = null;
+        state.loginStatus = false;
+      }
     },
 
     LogoutUser: (state) => {
-      state.currentUser = null;
+      state.activeUser = null;
+      state.loginStatus = false;
+      localStorage.removeItem("userInformation");
+      localStorage.removeItem("userStates");
+    },
+
+    fromOpen: (state, action) => {
+      state.openForm = action.payload;
     },
   },
 });
 
-export const { LoginUser, LogoutUser, LoginOpen } = AuthSlice.actions;
+export const { LoginUser, LogoutUser, fromOpen } = AuthSlice.actions;
 export default AuthSlice.reducer;

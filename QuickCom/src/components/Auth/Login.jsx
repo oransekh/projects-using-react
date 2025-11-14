@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { LoginUser } from "../data/AuthSlice";
-import { LoginOpen } from "../data/AuthSlice";
+import { fromOpen } from "../data/AuthSlice";
 import { X } from "lucide-react";
 
 export default function Login() {
@@ -29,11 +29,11 @@ export default function Login() {
     <div className="inset-0 fixed backdrop-blur-xs bg-black/25">
       <form
         onSubmit={handleSubmit}
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white text-gray-500 max-w-[350px] mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 right-1/2 -translate-y-1/2 z-50 bg-white text-gray-500 max-w-[350px] min-w-[300px] mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10"
       >
         <span>
           <X
-            onClick={() => dispatch(LoginOpen(false))}
+            onClick={() => dispatch(fromOpen(false))}
             className="h-5 absolute cursor-pointer text-gray-500 right-5"
           />
         </span>
