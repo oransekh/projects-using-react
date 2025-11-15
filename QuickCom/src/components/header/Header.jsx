@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { User, Search, Menu, X, UserRoundCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import { fromOpen } from "../data/AuthSlice";
+import UserProfile from "../common/UserProfile";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
+  const [isSidemenuOpen, setIsSidemenuOpen] = useState(false);
+
   const dispatch = useDispatch();
   const NavLinks = [
     { name: "Home", path: "/" },
@@ -15,8 +19,32 @@ const Header = () => {
     { name: "Contact", path: "/contact" },
   ];
 
-  const isOpen = useSelector((state) => state.auth.openForm);
   const isActive = useSelector((state) => state.auth.loginStatus);
+  const loginToken = useSelector((state) => state.auth.loginToken);
+
+  // to prevent showing toast on initial load
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return; // skip first load
+    }
+
+    if (loginToken) {
+      toast.success("Logged in successfully!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+      });
+    } else {
+      toast.info("You are logged out.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+      });
+    }
+  }, [loginToken]);
 
   return (
     <nav className="relative flex justify-between py-3 items-center text-sm text-gray-700 lg:px-24 md:px-12 px-6 border border-b-2 border-gray-200">
@@ -51,13 +79,29 @@ const Header = () => {
             <span className="hidden lg:block">Account</span>
           </button>
         ) : (
-          <button className="flex items-center gap-1 text-sm cursor-pointer">
-            <UserRoundCheck className="h-5 text-gray-500" />{" "}
-            <span className="hidden lg:block">Profile</span>
-          </button>
+          <div className="relative">
+            {" "}
+            <button
+              onClick={() => setIsSidemenuOpen(!isSidemenuOpen)}
+              className="flex items-center gap-1 text-sm cursor-pointer"
+            >
+              <UserRoundCheck className="h-5 text-gray-500" />{" "}
+              <span className="hidden lg:block">Profile</span>
+            </button>
+            {isSidemenuOpen && (
+              <div>
+                <UserProfile setIsSidemenuOpen={setIsSidemenuOpen} />
+              </div>
+            )}
+          </div>
         )}
 
-        <button onClick={() => setOpenMenu(true)} className="lg:hidden">
+        <button
+          onClick={() => {
+            setOpenMenu(true);
+          }}
+          className="lg:hidden"
+        >
           <Menu className="h-5 text-gray-500" />
         </button>
 
@@ -75,6 +119,7 @@ const Header = () => {
               />
               <span className="absolute left-1/2 -translate-x-1/2">Menu</span>
             </div>
+
             {/* nav-items*/}
             <div className="flex flex-col gap-3 px-3 py-4">
               {NavLinks.map((nav, index) => (

@@ -59,6 +59,7 @@ const AuthSlice = createSlice({
     activeUser: savedUser, // logged-in user OR null
     loginStatus: savedUser ? Status : false,
     openForm: false, // open Login & Sign-up form
+    loginToken: savedUser ? true : false,
   },
 
   reducers: {
